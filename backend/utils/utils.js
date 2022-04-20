@@ -9,7 +9,7 @@ exports.generateToken = (user) => {
       admin: user.admin,
     },
     process.env.JWT_SECRET || "SECRETITIS",
-    { expiresIn: "1h" }
+    { expiresIn: "30d" }
   );
 };
 

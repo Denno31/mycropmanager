@@ -2,6 +2,9 @@ const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const userRoutes = require("./routes/userRoutes.js");
+const cropRoutes = require("./routes/cropRoutes");
+const fieldRoutes = require("./routes/fieldRoute.js");
+const activityRoutes = require("./routes/activityRoute.js");
 const app = express();
 dotenv.config();
 
@@ -21,6 +24,12 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/user", userRoutes);
+app.use("/api/crop", cropRoutes);
+app.use("/api/field", fieldRoutes);
+app.use("/api/activity", activityRoutes);
+app.use((err, req, res, next) => {
+  res.status(500).send({ message: err.message });
+});
 
 app.listen(PORT, () => {
   console.log(`server listening on port ${PORT}`);

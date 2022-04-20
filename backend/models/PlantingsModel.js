@@ -19,10 +19,11 @@ const plantingSchema = mongoose.Schema(
     seedLotNumber: { type: String },
     seedOrigin: { type: String },
     shortNotes: { type: String },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
   {
     timestamps: true,
   }
 );
 const Planting = mongoose.model("Planting", plantingSchema);
-module.exports = { planting };
+module.exports = { Planting };
