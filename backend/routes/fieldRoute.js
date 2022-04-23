@@ -8,6 +8,7 @@ router.post(
   "/",
   isAuth,
   expressAsyncHandler(async (req, res) => {
+    console.log(req.body);
     const field = new Field({
       name: req.body.name,
       fieldType: req.body.fieldType,
@@ -33,7 +34,7 @@ router.get(
   expressAsyncHandler(async (req, res) => {
     const field = await Field.findOne({ _id: req.params.id });
     if (!field) return res.send({ message: "field not found" });
-    res.send({ field });
+    res.send(field);
   })
 );
 router.put(

@@ -19,12 +19,13 @@ router.post(
   expressAsyncHandler(async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
     if (user) {
-      return res.send({
-        _id: user._id,
-        name: user.name,
-        isAdmin: user.isAdmin,
-        token: generateToken(user),
-      });
+      if (bcrypt.compareSync(req.body.password, user.password))
+        return res.send({
+          _id: user._id,
+          name: user.name,
+          isAdmin: user.isAdmin,
+          token: generateToken(user),
+        });
     }
     res.status(401).send({ message: "Invalid email or password" });
   })
