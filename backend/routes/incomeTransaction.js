@@ -25,14 +25,20 @@ router.post(
 router.get(
   "/",
   expressAsyncHandler(async (req, res) => {
-    const incomes = await Income.find();
+    const incomes = await Income.find()
+      .populate("category")
+      .populate("field")
+      .exec();
     res.send(incomes);
   })
 );
 router.get(
   "/:id",
   expressAsyncHandler(async (req, res) => {
-    const income = await Income.findById(req.params.id);
+    const income = await Income.findById(req.params.id)
+      .populate("category")
+      .populate("field")
+      .exec();
     res.send(income);
   })
 );

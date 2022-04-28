@@ -5,6 +5,10 @@ import FieldScreen from "./screens/FieldScreen";
 import HomeScreen from "./screens/HomeScreen";
 import SignIn from "./screens/LoginScreen";
 import CropScreen from "./screens/CropScreen";
+import IncomeCategoryScreen from "./screens/IncomeCategoryScreen";
+import ExpenseCategoryScreen from "./screens/ExpenseCategoryScreen";
+import IncomeScreen from "./screens/incomeScreen";
+import ExpenseScreen from "./screens/ExpenseScreen";
 function App() {
   return (
     <BrowserRouter>
@@ -16,6 +20,31 @@ function App() {
         <Route exact path="/fields/:id" element={<FieldScreen />}></Route>
         <Route exact path="/crops/" element={<CropScreen />}></Route>
         <Route exact path="/crops/:id" element={<CropScreen />}></Route>
+        <Route
+          exact
+          path="/incomecategories/"
+          element={<IncomeCategoryScreen />}
+        ></Route>
+        <Route
+          exact
+          path="/incomecategories/:id"
+          element={<IncomeCategoryScreen />}
+        ></Route>
+        <Route
+          exact
+          path="/expensecategories/"
+          element={<ExpenseCategoryScreen />}
+        ></Route>
+        <Route
+          exact
+          path="/expensecategories/:id"
+          element={<ExpenseCategoryScreen />}
+        ></Route>
+        <Route exact path="/income/" element={<IncomeScreen />}></Route>
+        <Route exact path="/income/:id" element={<IncomeScreen />}></Route>
+        <Route exact path="/expense/" element={<ExpenseScreen />}></Route>
+        <Route exact path="/expense/:id" element={<ExpenseScreen />}></Route>
+        <Route path="*" element={<HomeScreen />}></Route>
       </Routes>
     </BrowserRouter>
   );

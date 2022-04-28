@@ -172,7 +172,7 @@ export default function AddFieldDialog({ handleClose, open }) {
                       <MenuItem value="Full To Partial Sun">
                         Full To Partial Sun
                       </MenuItem>
-                      <MenuItem value="Partial Shade<">Partial Shade</MenuItem>
+                      <MenuItem value="Partial Shade">Partial Shade</MenuItem>
                       <MenuItem value="Full Shade">Full Shade</MenuItem>
                     </Select>
                   </FormControl>

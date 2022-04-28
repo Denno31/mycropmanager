@@ -17,6 +17,41 @@ import {
   deleteCropReducer,
   updateCropReducer,
 } from "./reducers/cropReducers";
+import {
+  addIncomeCategoryReducer,
+  deleteIncomeCateogryReducer,
+  incomeCategoriesReducer,
+  incomeCategoryReducer,
+  updateIncomeCategroyReducer,
+} from "./reducers/incomeCategoryReducer";
+import {
+  addExpenseCategoryReducer,
+  deleteExpenseCateogryReducer,
+  expenseCategoriesReducer,
+  updateExpenseCategroyReducer,
+} from "./reducers/expenseCategoryReducer";
+import {
+  addIncomeReducer,
+  deleteIncomeReducer,
+  incomeReducer,
+  incomesReducer,
+  updateIncomeReducer,
+} from "./reducers/incomeReducer";
+import {
+  addVarietyReducer,
+  deleteVarietyReducer,
+  updateVarietyReducer,
+  varietiesReducer,
+  varietyReducer,
+} from "./reducers/varietyReducers";
+import {
+  addExpenseReducer,
+  deleteExpenseReducer,
+  expenseReducer,
+  expensesReducer,
+  EXPENSESReducer,
+  updateExpenseReducer,
+} from "./reducers/expenseReducers";
 
 const initialState = {
   userSignin: {
@@ -39,6 +74,36 @@ const reducer = combineReducers({
   crop: cropReducer,
   cropUpdate: updateCropReducer,
   cropDelete: deleteCropReducer,
+
+  incomeCategories: incomeCategoriesReducer,
+  incomeCategoryCreate: addIncomeCategoryReducer,
+  incomeCategory: incomeCategoryReducer,
+  incomeCategoryUpdate: updateIncomeCategroyReducer,
+  incomeCategoryDelete: deleteIncomeCateogryReducer,
+
+  expenseCategories: expenseCategoriesReducer,
+  expenseCategoryCreate: addExpenseCategoryReducer,
+  expenseCategory: addExpenseCategoryReducer,
+  expenseCategoryUpdate: updateExpenseCategroyReducer,
+  expenseCategoryDelete: deleteExpenseCateogryReducer,
+
+  incomes: incomesReducer,
+  incomeCreate: addIncomeReducer,
+  income: incomeReducer,
+  incomeUpdate: updateIncomeReducer,
+  incomeDelete: deleteIncomeReducer,
+
+  expenses: expensesReducer,
+  expenseCreate: addExpenseReducer,
+  expense: expenseReducer,
+  expenseUpdate: updateExpenseReducer,
+  expenseDelete: deleteExpenseReducer,
+
+  varieties: varietiesReducer,
+  varietyCreate: addVarietyReducer,
+  variety: varietyReducer,
+  varietyUpdate: updateVarietyReducer,
+  varietyDelete: deleteVarietyReducer,
 });
 const store = createStore(
   reducer,

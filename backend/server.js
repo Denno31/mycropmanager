@@ -7,6 +7,8 @@ const fieldRoutes = require("./routes/fieldRoute.js");
 const incomeCategoryRoute = require("./routes/incomeRoutes");
 const expenseCategoryRouter = require("./routes/expenseRoute");
 const incomeRoute = require("./routes/incomeTransaction");
+const expenseRoute = require("./routes/expenseTransaction");
+const varietyRoute = require("./routes/varietyRoutes.js");
 const activityRoutes = require("./routes/activityRoute.js");
 const app = express();
 dotenv.config();
@@ -33,6 +35,8 @@ app.use("/api/activity", activityRoutes);
 app.use("/api/incomecategory", incomeCategoryRoute);
 app.use("/api/expenseCategory", expenseCategoryRouter);
 app.use("/api/income", incomeRoute);
+app.use("/api/expense", expenseRoute);
+app.use("/api/variety", varietyRoute);
 app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
 });

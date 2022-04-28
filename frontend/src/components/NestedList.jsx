@@ -104,13 +104,13 @@ export default function NestedList() {
       </ListItemButton>
       <Collapse in={openTransactions} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
+          <ListItemButton sx={{ pl: 4 }} component={Link} to="/income">
             <ListItemIcon></ListItemIcon>
             <ListItemText primary="Income" />
           </ListItemButton>
         </List>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
+          <ListItemButton sx={{ pl: 4 }} component={Link} to="/expense">
             <ListItemIcon></ListItemIcon>
             <ListItemText primary="Expense" />
           </ListItemButton>
@@ -124,13 +124,21 @@ export default function NestedList() {
       </ListItemButton>
       <Collapse in={openFarmSetup} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
+          <ListItemButton
+            sx={{ pl: 4 }}
+            component={Link}
+            to="/incomecategories"
+          >
             <ListItemIcon></ListItemIcon>
             <ListItemText primary="Income category" />
           </ListItemButton>
         </List>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
+          <ListItemButton
+            sx={{ pl: 4 }}
+            component={Link}
+            to="/expensecategories"
+          >
             <ListItemIcon></ListItemIcon>
             <ListItemText primary="Expense category" />
           </ListItemButton>

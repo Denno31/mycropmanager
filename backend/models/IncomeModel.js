@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const incomeSchema = mongoose.Schema(
   {
-    field: { type: String },
+    field: { type: mongoose.Schema.Types.ObjectId, ref: "Field" },
     category: { type: mongoose.Schema.Types.ObjectId, ref: "IncomeCategory" },
     incomeAmount: { type: Number, required: true },
     incomeDate: { type: Date, required: true },

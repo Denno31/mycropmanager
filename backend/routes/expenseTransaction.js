@@ -25,7 +25,10 @@ router.post(
 router.get(
   "/",
   expressAsyncHandler(async (req, res) => {
-    const expenses = await Expense.find();
+    const expenses = await Expense.find()
+      .populate("field")
+      .populate("category")
+      .exec();
     res.send(expenses);
   })
 );
