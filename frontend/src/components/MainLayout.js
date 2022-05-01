@@ -1,5 +1,6 @@
 import * as React from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
+import { useDispatch } from "react-redux";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
@@ -11,17 +12,17 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
+import LogoutIcon from "@mui/icons-material/Logout";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+
 import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { mainListItems, secondaryListItems } from "./listItems";
 import NestedList from "./NestedList";
-
-import Deposits from "./Deposits";
-import Orders from "./Orders";
 
 function Copyright(props) {
   return (
@@ -88,10 +89,19 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 function DashboardContent(props) {
+  const dispatch = useDispatch();
+  const [width, setWidth] = React.useState(window.innerWidth);
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  React.useEffect(() => {
+    if (width <= 768) {
+      setOpen(false);
+    }
+    // window.addEventListener("resize", handleWidthSize);
+  }, []);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -124,7 +134,7 @@ function DashboardContent(props) {
             Dashboard
           </Typography>
           <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
+            <Badge badgeContent={0} color="secondary">
               <NotificationsIcon />
             </Badge>
           </IconButton>
@@ -149,6 +159,16 @@ function DashboardContent(props) {
           <NestedList />
           <Divider sx={{ my: 1 }} />
           {secondaryListItems}
+          <ListItemButton
+            onClick={(e) => {
+              dispatch({ type: "USER_SIGNOUT" });
+            }}
+          >
+            <ListItemIcon>
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText primary="Logout" />
+          </ListItemButton>
         </List>
       </Drawer>
       <Box

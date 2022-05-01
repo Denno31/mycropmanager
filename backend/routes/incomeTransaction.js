@@ -1,6 +1,7 @@
 const express = require("express");
 const expressAsyncHandler = require("express-async-handler");
 const { Income } = require("../models/IncomeModel");
+const { Expense } = require("../models/ExpenseModel");
 const { isAuth } = require("../utils/utils");
 
 const router = express.Router();
@@ -69,6 +70,29 @@ router.delete(
     if (!income) return res.send({ message: "Income not found" });
     const deletedIncome = await income.delete();
     res.send({ message: "Income deleted successfully" });
+  })
+);
+router.get(
+  "/transaction/summary",
+
+  expressAsyncHandler(async (req, res) => {
+    const income = await Income.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalIncome: { $sum: "$incomeAmount" },
+        },
+      },
+    ]);
+    const expense = await Expense.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalExpense: { $sum: "$expenseAmount" },
+        },
+      },
+    ]);
+    res.send({ income, expense });
   })
 );
 module.exports = router;

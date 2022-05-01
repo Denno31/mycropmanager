@@ -17,7 +17,9 @@ import FormControl from "@mui/material/FormControl";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import moment from "moment";
+import { format } from "date-fns";
+import { convertToLocalTime } from "date-fns-timezone";
+
 import {
   fetchExpenses,
   fetchExpense,
@@ -36,8 +38,9 @@ import {
 } from "../../constants/expenseConstants";
 import { fetchFields } from "../../actions/fieldActions";
 import { fetchExpenseCategories } from "../../actions/expenseCategoryActions";
-
+import { dateFormater } from "../../utils";
 export default function AddExpenseDialog({ handleClose, open }) {
+  const DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
   const dispatch = useDispatch();
   const { id } = useParams();
   const { error, loading, success } = useSelector(
@@ -85,8 +88,9 @@ export default function AddExpenseDialog({ handleClose, open }) {
       setExpense(expense?.expenseAmount);
       setReceipt(expense?.receiptNo);
       setCustomer(expense.customerName);
-      setExpenseCategory(expense?.category.expenseCategory);
-      setField(expense?.field.name);
+      setExpenseCategory(expense?.category._id);
+      setExpenseDate(dateFormater(expense.expenseDate));
+      setField(expense?.field._id);
     } else {
       setIsUpdate(false);
     }
@@ -128,6 +132,14 @@ export default function AddExpenseDialog({ handleClose, open }) {
       (dateX.getDate() + 1)
     );
   };
+  function convertUTCDateToLocalDate(date) {
+    console.log(date);
+    var newDate = new Date(
+      date.getTime() - date.getTimezoneOffset() * 60 * 1000
+    );
+    return newDate;
+  }
+  const createDate = (date) => {};
   return (
     <div>
       <Dialog
@@ -136,7 +148,9 @@ export default function AddExpenseDialog({ handleClose, open }) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Add New Expense "}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">
+          {!isUpdate ? "Add New Expense " : "Update Expense"}
+        </DialogTitle>
         <DialogContent>
           {(loading ||
             loadingExpenseUpdate ||
@@ -180,29 +194,13 @@ export default function AddExpenseDialog({ handleClose, open }) {
                       label="-Select field-"
                     >
                       {fields?.map((field) => (
-                        <MenuItem key={fields?._id} value={field._id}>
+                        <MenuItem key={field?._id} value={field._id}>
                           {field?.name}
                         </MenuItem>
                       ))}
                     </Select>
                   </FormControl>
-                  {/* <FormControl sx={{ mt: 2, mb: 1 }} fullWidth>
-                    <InputLabel id="planting-label">Planting</InputLabel>
-                    <Select
-                      labelId="planting-label"
-                      id="planting"
-                      value={planting}
-                      name="planting"
-                      onChange={(e) => setPlanting(e.target.value)}
-                      label="-Select field-"
-                    >
-                      {expenseCategories?.map((expensecategory) => (
-                        <MenuItem value={expensecategory._id}>
-                          {expensecategory.expenseCategory}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl> */}
+
                   <FormControl sx={{ mt: 2, mb: 1 }} fullWidth>
                     <InputLabel id="expense-category-label">
                       Expense Category
@@ -226,7 +224,7 @@ export default function AddExpenseDialog({ handleClose, open }) {
                     </Select>
                   </FormControl>
                   <TextField
-                    label="How much did you earn"
+                    label="How much did spend"
                     name="amount"
                     margin="normal"
                     type="number"

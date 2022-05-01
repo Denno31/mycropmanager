@@ -24,14 +24,16 @@ router.post(
 router.get(
   "/",
   expressAsyncHandler(async (req, res) => {
-    const varieties = await Variety.find();
+    const varieties = await Variety.find().populate("crop").exec();
     res.send(varieties);
   })
 );
 router.get(
   "/:id",
   expressAsyncHandler(async (req, res) => {
-    const variety = await Variety.findOne({ _id: req.params.id });
+    const variety = await Variety.findOne({ _id: req.params.id })
+      .populate("crop")
+      .exec();
     if (!variety) return res.send({ message: "Variety not found" });
     res.send(variety);
   })
@@ -48,16 +50,18 @@ router.put(
   "/:id",
   isAuth,
   expressAsyncHandler(async (req, res) => {
+    console.log(req.body);
     const variety = await Variety.findById(req.params.id);
     if (!variety) return res.send({ message: "variety not found" });
     variety.name = req.body.name || variety.name;
+    variety.crop = req.body.crop || variety.crop;
     variety.fieldType = req.body.fieldType || variety.fieldType;
     variety.lightProfile = req.body.lightProfile || variety.lightProfile;
     variety.daysToMaturity = req.body.daysToMaturity || variety.daysToMaturity;
     variety.harvestWindow = req.body.harvestWindow || field.harvestWindow;
     variety.shortNotes = req.body.shortNotes || variety.shortNotes;
     const savedVariety = await variety.save();
-    res.send({ message: "field saved", variety: savedVariety });
+    res.send({ message: "variety saved", variety: savedVariety });
   })
 );
 router.delete(

@@ -2,7 +2,15 @@ import { createStore, combineReducers, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 
 import thunk from "redux-thunk";
-import { userSigninReducer } from "./reducers/userReducer";
+import {
+  addUserReducer,
+  deleteUserReducer,
+  fetchUserReducer,
+  fetchUsersReducer,
+  updateUserReducer,
+  userReducer,
+  userSigninReducer,
+} from "./reducers/userReducer";
 import {
   addFieldReducer,
   fieldsReducer,
@@ -49,9 +57,37 @@ import {
   deleteExpenseReducer,
   expenseReducer,
   expensesReducer,
-  EXPENSESReducer,
   updateExpenseReducer,
 } from "./reducers/expenseReducers";
+import {
+  addPlantingReducer,
+  deletePlantingReducer,
+  plantingReducer,
+  plantingsReducer,
+  updatePlantingReducer,
+} from "./reducers/PlantingReducer";
+import {
+  addHarvestReducer,
+  deleteHarvestReducer,
+  harvestReducer,
+  harvestsReducer,
+  updateHarvestReducer,
+} from "./reducers/harvestReducers";
+import {
+  addTreatmentReducer,
+  deleteTreatmentReducer,
+  treatmentReducer,
+  treatmentsReducer,
+  updateTreatmentReducer,
+} from "./reducers/treatmentReducers";
+import {
+  addTaskReducer,
+  deleteTaskReducer,
+  taskReducer,
+  tasksReducer,
+  updateTaskReducer,
+} from "./reducers/taskReducers";
+import { transactionSummaryReducer } from "./reducers/transactionsReducer";
 
 const initialState = {
   userSignin: {
@@ -63,6 +99,12 @@ const initialState = {
 
 const reducer = combineReducers({
   userSignin: userSigninReducer,
+  users: fetchUsersReducer,
+  userCreate: addUserReducer,
+  user: fetchUserReducer,
+  userUpdate: updateUserReducer,
+  userDelete: deleteUserReducer,
+
   fields: fieldsReducer,
   fieldCreate: addFieldReducer,
   field: fieldReducer,
@@ -104,6 +146,32 @@ const reducer = combineReducers({
   variety: varietyReducer,
   varietyUpdate: updateVarietyReducer,
   varietyDelete: deleteVarietyReducer,
+
+  plantings: plantingsReducer,
+  plantingCreate: addPlantingReducer,
+  planting: plantingReducer,
+  plantingUpdate: updatePlantingReducer,
+  plantingDelete: deletePlantingReducer,
+
+  harvests: harvestsReducer,
+  harvestCreate: addHarvestReducer,
+  harvest: harvestReducer,
+  harvestUpdate: updateHarvestReducer,
+  harvestDelete: deleteHarvestReducer,
+
+  treatments: treatmentsReducer,
+  treatmentCreate: addTreatmentReducer,
+  treatment: treatmentReducer,
+  treatmentUpdate: updateTreatmentReducer,
+  treatmentDelete: deleteTreatmentReducer,
+
+  tasks: tasksReducer,
+  taskCreate: addTaskReducer,
+  task: taskReducer,
+  taskUpdate: updateTaskReducer,
+  taskDelete: deleteTaskReducer,
+
+  transactionSummary: transactionSummaryReducer,
 });
 const store = createStore(
   reducer,

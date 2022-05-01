@@ -21,6 +21,7 @@ import { deleteIncome, fetchIncomes } from "../actions/incomeActions";
 import moment from "moment";
 import { FETCH_INCOME_RESET } from "../constants/incomeConstants";
 import AddIncomeDialog from "../components/forms/AddIncomeDialog";
+import { dateFormater } from "../utils";
 
 const useStyles = makeStyles({
   root: {
@@ -100,9 +101,7 @@ const IncomeScreen = () => {
               {incomes?.map((income) => (
                 <TableRow key={income?._id}>
                   <TableCell>{income?.category?.incomeCategory}</TableCell>
-                  <TableCell>
-                    {moment().format(income?.incomeDate, "MM-DD-YYYY")}
-                  </TableCell>
+                  <TableCell>{dateFormater(income?.incomeDate)}</TableCell>
                   <TableCell>{income?.incomeAmount}</TableCell>
                   <TableCell size="small" align="right">
                     <Button

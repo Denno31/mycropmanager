@@ -35,7 +35,10 @@ router.get(
 router.get(
   "/:id",
   expressAsyncHandler(async (req, res) => {
-    const expense = await Expense.findById(req.params.id);
+    const expense = await Expense.findById(req.params.id)
+      .populate("field")
+      .populate("category")
+      .exec();
     res.send(expense);
   })
 );

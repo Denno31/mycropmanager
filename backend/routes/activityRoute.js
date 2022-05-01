@@ -26,6 +26,7 @@ router.post(
       seedOrigin: req.body.seedOrigin,
       shortNotes: req.body.shortNotes,
       createdBy: req.user,
+      status: req.body.status,
     });
     const createdPlanting = await planting.save();
     res.send({ message: "Planting created", planting: createdPlanting });
@@ -34,7 +35,10 @@ router.post(
 router.get(
   "/planting",
   expressAsyncHandler(async (req, res) => {
-    const plantings = await Planting.find();
+    const plantings = await Planting.find()
+      .populate("crop")
+      .populate("field")
+      .exec();
     res.send(plantings);
   })
 );
@@ -72,6 +76,7 @@ router.put(
     planting.seedLotNumber = req.body.seedLotNumber || planting.seedLotNumber;
     planting.seedOrigin = req.body.seedOrigin || planting.seedOrigin;
     planting.shortNotes = req.body.shortNotes || planting.shortNotes;
+    planting.status = req.body.status || planting.status;
 
     const updatedPlanting = await planting.save();
     res.send({ message: "Planting updated", planting: updatedPlanting });
@@ -113,7 +118,20 @@ router.post(
 router.get(
   "/harvest",
   expressAsyncHandler(async (req, res) => {
-    const harvests = await Harvest.find();
+    const harvests = await Harvest.find()
+      .populate({
+        path: "plantingToHarvest",
+        populate: {
+          path: "crop",
+        },
+      })
+      .populate({
+        path: "plantingToHarvest",
+        populate: {
+          path: "field",
+        },
+      })
+      .exec();
     res.send(harvests);
   })
 );
@@ -158,8 +176,10 @@ router.delete(
   "/harvest/:id",
   isAuth,
   expressAsyncHandler(async (req, res) => {
+    console.log(req.params);
     const harvest = await Harvest.findById(req.params.id);
     if (!harvest) return res.send({ message: "Harvest was not found" });
+    const deletedHarvest = await harvest.delete();
     res.send({ message: "Harvest was deleted successfully" });
   })
 );
@@ -185,7 +205,7 @@ router.post(
 router.get(
   "/treatment",
   expressAsyncHandler(async (req, res) => {
-    const treatments = await Treatment.find();
+    const treatments = await Treatment.find().populate("field");
     res.send(treatments);
   })
 );
@@ -248,7 +268,7 @@ router.post(
 router.get(
   "/task",
   expressAsyncHandler(async (req, res) => {
-    const tasks = await Task.find();
+    const tasks = await Task.find().populate("field");
     res.send(tasks);
   })
 );

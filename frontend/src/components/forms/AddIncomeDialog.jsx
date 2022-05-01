@@ -17,6 +17,7 @@ import FormControl from "@mui/material/FormControl";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { dateFormater } from "../../utils";
 import moment from "moment";
 import {
   fetchIncomes,
@@ -85,8 +86,9 @@ export default function AddIncomeDialog({ handleClose, open }) {
       setIncome(income?.incomeAmount);
       setReceipt(income?.receiptNo);
       setCustomer(income.customerName);
-      setIncomeCategory(income?.category.incomeCategory);
-      setField(income?.field.name);
+      setIncomeCategory(income?.category._id);
+      setIncomeDate(dateFormater(income?.incomeDate));
+      setField(income?.field._id);
     } else {
       setIsUpdate(false);
     }
@@ -136,7 +138,9 @@ export default function AddIncomeDialog({ handleClose, open }) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Add New Income "}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">
+          {!isUpdate ? "Add New Income " : "Update Income"}
+        </DialogTitle>
         <DialogContent>
           {(loading ||
             loadingIncomeUpdate ||

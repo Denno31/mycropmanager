@@ -56,17 +56,11 @@ export default function AddCropDialog({ handleClose, open }) {
       setIsUpdate(true);
       setCropName(crop?.cropName);
       setHarvestUnit(crop?.harvestUnit);
+      setShortNotes(crop?.shortNotes);
     } else {
       setIsUpdate(false);
     }
   }, [success, handleClose, dispatch, id, crop, successUpdate]);
-  React.useEffect(() => {
-    if (id) {
-      dispatch(fetchCrop(id));
-    } else {
-      dispatch({ type: FETCH_CROP_RESET });
-    }
-  }, [dispatch, id]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

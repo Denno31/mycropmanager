@@ -17,10 +17,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { makeStyles } from "@mui/styles";
 import { Typography } from "@mui/material";
-import { deleteExpense, fetchExpenses } from "../actions/expenseActions";
-import moment from "moment";
-import { FETCH_EXPENSE_RESET } from "../constants/expenseConstants";
-import AddExpenseDialog from "../components/forms/AddExpenseDialog";
+import { deletePlanting, fetchPlantings } from "../actions/plantingActions";
+import AddPlantingDialog from "../components/forms/AddPlantingDialog";
+import { FETCH_PLANTING_RESET } from "../constants/plantingConstants";
 import { dateFormater } from "../utils";
 
 const useStyles = makeStyles({
@@ -28,21 +27,21 @@ const useStyles = makeStyles({
     padding: "15px 15px",
   },
 });
-const ExpenseScreen = () => {
+const PlantingScreen = () => {
   const navigate = useNavigate();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { loading, error, expenses } = useSelector((state) => state.expenses);
+  const { loading, error, plantings } = useSelector((state) => state.plantings);
   const {
-    loading: loadingExpenseDelete,
-    error: errorExpenseDelete,
-    success: successExpenseDelete,
-  } = useSelector((state) => state.expenseDelete);
+    loading: loadingPlantingDelete,
+    error: errorPlantingDelete,
+    success: successPlantingDelete,
+  } = useSelector((state) => state.plantingDelete);
   const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
-    dispatch(fetchExpenses());
-  }, [dispatch, successExpenseDelete]);
+    dispatch(fetchPlantings());
+  }, [dispatch, successPlantingDelete]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -58,13 +57,13 @@ const ExpenseScreen = () => {
         <TableContainer component={Paper}>
           <Typography variant="div">
             <Typography className={classes.root} variant="h5">
-              Expenses
+              Plantings
             </Typography>
             <Typography className={classes.root} variant="div">
               <Button
                 onClick={() => {
-                  navigate("/expense");
-                  dispatch({ type: FETCH_EXPENSE_RESET });
+                  navigate("/planting");
+                  dispatch({ type: FETCH_PLANTING_RESET });
                   handleClickOpen();
                 }}
                 startIcon={<AddIcon />}
@@ -75,38 +74,50 @@ const ExpenseScreen = () => {
               </Button>
             </Typography>
           </Typography>
-          {(loading || loadingExpenseDelete) && <CircularProgress />}
+          {(loading || loadingPlantingDelete) && <CircularProgress />}
           {error && (
             <Alert style={{ width: "80%", margin: "0 auto" }} severity="error">
               {error}
             </Alert>
           )}
-          {errorExpenseDelete && (
+          {errorPlantingDelete && (
             <Alert style={{ width: "80%", margin: "0 auto" }} severity="error">
-              {errorExpenseDelete}
+              {errorPlantingDelete}
             </Alert>
           )}
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Source</TableCell>
-                <TableCell>Date of Expense</TableCell>
-                <TableCell>Amount</TableCell>
+                <TableCell>Date</TableCell>
+
+                <TableCell>Crop</TableCell>
+                <TableCell>Field</TableCell>
+                <TableCell>Quantity</TableCell>
+                <TableCell>Distance</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Harvest Date</TableCell>
                 <TableCell size="small" colSpan={2} align="center">
                   Actions
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {expenses?.map((expense) => (
-                <TableRow key={expense?._id}>
-                  <TableCell>{expense?.category?.expenseCategory}</TableCell>
-                  <TableCell>{dateFormater(expense?.expenseDate)}</TableCell>
-                  <TableCell>{expense?.expenseAmount}</TableCell>
+              {plantings?.map((planting) => (
+                <TableRow key={planting?._id}>
+                  <TableCell align="left">
+                    {dateFormater(planting?.plantingDate)}
+                  </TableCell>
+                  <TableCell>{planting?.crop?.cropName}</TableCell>
+                  <TableCell>{planting?.field?.name}</TableCell>
+                  <TableCell>{planting?.qtyPlanted}</TableCell>
+                  <TableCell>{planting?.distanceBetweenPlants}</TableCell>
+                  <TableCell>{planting?.status}</TableCell>
+                  <TableCell>{dateFormater(planting?.fHarvestDate)}</TableCell>
+
                   <TableCell size="small" align="right">
                     <Button
                       onClick={() => {
-                        navigate(`/expense/${expense._id}`);
+                        navigate(`/planting/${planting._id}`);
                         handleClickOpen();
                       }}
                     >
@@ -116,8 +127,8 @@ const ExpenseScreen = () => {
                   <TableCell size="small" align="left">
                     <Button
                       onClick={() => {
-                        console.log(expense._id);
-                        dispatch(deleteExpense(expense._id));
+                        console.log(planting._id);
+                        dispatch(deletePlanting(planting._id));
                       }}
                     >
                       <DeleteIcon></DeleteIcon>
@@ -128,14 +139,14 @@ const ExpenseScreen = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <AddExpenseDialog
+        <AddPlantingDialog
           handleClickOpen={handleClickOpen}
           handleClose={handleClose}
           open={open}
-        ></AddExpenseDialog>
+        ></AddPlantingDialog>
       </Typography>
     </MainLayout>
   );
 };
 
-export default ExpenseScreen;
+export default PlantingScreen;

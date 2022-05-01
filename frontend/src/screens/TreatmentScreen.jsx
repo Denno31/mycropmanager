@@ -17,10 +17,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { makeStyles } from "@mui/styles";
 import { Typography } from "@mui/material";
-import { deleteExpense, fetchExpenses } from "../actions/expenseActions";
-import moment from "moment";
-import { FETCH_EXPENSE_RESET } from "../constants/expenseConstants";
-import AddExpenseDialog from "../components/forms/AddExpenseDialog";
+import { deleteTreatment, fetchTreatments } from "../actions/treatmentActions";
+import AddTreatmentDialog from "../components/forms/AddTreatmentDialog";
+import { FETCH_TREATMENT_RESET } from "../constants/treatmentConstants";
 import { dateFormater } from "../utils";
 
 const useStyles = makeStyles({
@@ -28,21 +27,23 @@ const useStyles = makeStyles({
     padding: "15px 15px",
   },
 });
-const ExpenseScreen = () => {
+const TreatmentScreen = () => {
   const navigate = useNavigate();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { loading, error, expenses } = useSelector((state) => state.expenses);
+  const { loading, error, treatments } = useSelector(
+    (state) => state.treatments
+  );
   const {
-    loading: loadingExpenseDelete,
-    error: errorExpenseDelete,
-    success: successExpenseDelete,
-  } = useSelector((state) => state.expenseDelete);
+    loading: loadingTreatmentDelete,
+    error: errorTreatmentDelete,
+    success: successTreatmentDelete,
+  } = useSelector((state) => state.treatmentDelete);
   const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
-    dispatch(fetchExpenses());
-  }, [dispatch, successExpenseDelete]);
+    dispatch(fetchTreatments());
+  }, [dispatch, successTreatmentDelete]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -58,13 +59,13 @@ const ExpenseScreen = () => {
         <TableContainer component={Paper}>
           <Typography variant="div">
             <Typography className={classes.root} variant="h5">
-              Expenses
+              Treatments
             </Typography>
             <Typography className={classes.root} variant="div">
               <Button
                 onClick={() => {
-                  navigate("/expense");
-                  dispatch({ type: FETCH_EXPENSE_RESET });
+                  navigate("/treatment");
+                  dispatch({ type: FETCH_TREATMENT_RESET });
                   handleClickOpen();
                 }}
                 startIcon={<AddIcon />}
@@ -75,38 +76,51 @@ const ExpenseScreen = () => {
               </Button>
             </Typography>
           </Typography>
-          {(loading || loadingExpenseDelete) && <CircularProgress />}
+          {(loading || loadingTreatmentDelete) && <CircularProgress />}
           {error && (
             <Alert style={{ width: "80%", margin: "0 auto" }} severity="error">
               {error}
             </Alert>
           )}
-          {errorExpenseDelete && (
+          {errorTreatmentDelete && (
             <Alert style={{ width: "80%", margin: "0 auto" }} severity="error">
-              {errorExpenseDelete}
+              {errorTreatmentDelete}
             </Alert>
           )}
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Source</TableCell>
-                <TableCell>Date of Expense</TableCell>
-                <TableCell>Amount</TableCell>
+                <TableCell>Date</TableCell>
+
+                {/* <TableCell>Crop</TableCell> */}
+                <TableCell>Field</TableCell>
+                <TableCell>Product</TableCell>
+                <TableCell>Quantity</TableCell>
+                <TableCell>Status</TableCell>
+
                 <TableCell size="small" colSpan={2} align="center">
                   Actions
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {expenses?.map((expense) => (
-                <TableRow key={expense?._id}>
-                  <TableCell>{expense?.category?.expenseCategory}</TableCell>
-                  <TableCell>{dateFormater(expense?.expenseDate)}</TableCell>
-                  <TableCell>{expense?.expenseAmount}</TableCell>
+              {treatments?.map((treatment) => (
+                <TableRow key={treatment?._id}>
+                  <TableCell align="left">
+                    {dateFormater(treatment?.treatmentDate)}
+                  </TableCell>
+                  {/* <TableCell>
+                    {treatment?.plantingToTreatment?.crop?.cropName}
+                  </TableCell> */}
+                  <TableCell>{treatment?.field?.name}</TableCell>
+                  <TableCell>{treatment?.productUsed}</TableCell>
+                  <TableCell>{treatment?.quantityOfProduct}</TableCell>
+                  <TableCell>{treatment?.status}</TableCell>
+
                   <TableCell size="small" align="right">
                     <Button
                       onClick={() => {
-                        navigate(`/expense/${expense._id}`);
+                        navigate(`/treatment/${treatment._id}`);
                         handleClickOpen();
                       }}
                     >
@@ -116,8 +130,8 @@ const ExpenseScreen = () => {
                   <TableCell size="small" align="left">
                     <Button
                       onClick={() => {
-                        console.log(expense._id);
-                        dispatch(deleteExpense(expense._id));
+                        console.log(treatment._id);
+                        dispatch(deleteTreatment(treatment._id));
                       }}
                     >
                       <DeleteIcon></DeleteIcon>
@@ -128,14 +142,14 @@ const ExpenseScreen = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <AddExpenseDialog
+        <AddTreatmentDialog
           handleClickOpen={handleClickOpen}
           handleClose={handleClose}
           open={open}
-        ></AddExpenseDialog>
+        ></AddTreatmentDialog>
       </Typography>
     </MainLayout>
   );
 };
 
-export default ExpenseScreen;
+export default TreatmentScreen;

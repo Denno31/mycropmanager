@@ -17,10 +17,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { makeStyles } from "@mui/styles";
 import { Typography } from "@mui/material";
-import { deleteExpense, fetchExpenses } from "../actions/expenseActions";
-import moment from "moment";
-import { FETCH_EXPENSE_RESET } from "../constants/expenseConstants";
-import AddExpenseDialog from "../components/forms/AddExpenseDialog";
+import { deleteTask, fetchTasks } from "../actions/taskActions";
+import AddTaskDialog from "../components/forms/AddTaskDialog";
+import { FETCH_TASK_RESET } from "../constants/taskConstants";
 import { dateFormater } from "../utils";
 
 const useStyles = makeStyles({
@@ -28,21 +27,21 @@ const useStyles = makeStyles({
     padding: "15px 15px",
   },
 });
-const ExpenseScreen = () => {
+const TaskScreen = () => {
   const navigate = useNavigate();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { loading, error, expenses } = useSelector((state) => state.expenses);
+  const { loading, error, tasks } = useSelector((state) => state.tasks);
   const {
-    loading: loadingExpenseDelete,
-    error: errorExpenseDelete,
-    success: successExpenseDelete,
-  } = useSelector((state) => state.expenseDelete);
+    loading: loadingTaskDelete,
+    error: errorTaskDelete,
+    success: successTaskDelete,
+  } = useSelector((state) => state.taskDelete);
   const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
-    dispatch(fetchExpenses());
-  }, [dispatch, successExpenseDelete]);
+    dispatch(fetchTasks());
+  }, [dispatch, successTaskDelete]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -58,13 +57,13 @@ const ExpenseScreen = () => {
         <TableContainer component={Paper}>
           <Typography variant="div">
             <Typography className={classes.root} variant="h5">
-              Expenses
+              Tasks
             </Typography>
             <Typography className={classes.root} variant="div">
               <Button
                 onClick={() => {
-                  navigate("/expense");
-                  dispatch({ type: FETCH_EXPENSE_RESET });
+                  navigate("/task");
+                  dispatch({ type: FETCH_TASK_RESET });
                   handleClickOpen();
                 }}
                 startIcon={<AddIcon />}
@@ -75,38 +74,51 @@ const ExpenseScreen = () => {
               </Button>
             </Typography>
           </Typography>
-          {(loading || loadingExpenseDelete) && <CircularProgress />}
+          {(loading || loadingTaskDelete) && <CircularProgress />}
           {error && (
             <Alert style={{ width: "80%", margin: "0 auto" }} severity="error">
               {error}
             </Alert>
           )}
-          {errorExpenseDelete && (
+          {errorTaskDelete && (
             <Alert style={{ width: "80%", margin: "0 auto" }} severity="error">
-              {errorExpenseDelete}
+              {errorTaskDelete}
             </Alert>
           )}
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Source</TableCell>
-                <TableCell>Date of Expense</TableCell>
-                <TableCell>Amount</TableCell>
+                <TableCell>Date</TableCell>
+
+                {/* <TableCell>Crop</TableCell> */}
+                <TableCell>Field</TableCell>
+                <TableCell>Name</TableCell>
+
+                <TableCell>Status</TableCell>
+
                 <TableCell size="small" colSpan={2} align="center">
                   Actions
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {expenses?.map((expense) => (
-                <TableRow key={expense?._id}>
-                  <TableCell>{expense?.category?.expenseCategory}</TableCell>
-                  <TableCell>{dateFormater(expense?.expenseDate)}</TableCell>
-                  <TableCell>{expense?.expenseAmount}</TableCell>
+              {tasks?.map((task) => (
+                <TableRow key={task?._id}>
+                  <TableCell align="left">
+                    {dateFormater(task?.taskDate)}
+                  </TableCell>
+                  {/* <TableCell>
+                    {task?.plantingToTask?.crop?.cropName}
+                  </TableCell> */}
+                  <TableCell>{task?.field?.name}</TableCell>
+                  <TableCell>{task?.taskName}</TableCell>
+
+                  <TableCell>{task?.status}</TableCell>
+
                   <TableCell size="small" align="right">
                     <Button
                       onClick={() => {
-                        navigate(`/expense/${expense._id}`);
+                        navigate(`/task/${task._id}`);
                         handleClickOpen();
                       }}
                     >
@@ -116,8 +128,8 @@ const ExpenseScreen = () => {
                   <TableCell size="small" align="left">
                     <Button
                       onClick={() => {
-                        console.log(expense._id);
-                        dispatch(deleteExpense(expense._id));
+                        console.log(task._id);
+                        dispatch(deleteTask(task._id));
                       }}
                     >
                       <DeleteIcon></DeleteIcon>
@@ -128,14 +140,14 @@ const ExpenseScreen = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <AddExpenseDialog
+        <AddTaskDialog
           handleClickOpen={handleClickOpen}
           handleClose={handleClose}
           open={open}
-        ></AddExpenseDialog>
+        ></AddTaskDialog>
       </Typography>
     </MainLayout>
   );
 };
 
-export default ExpenseScreen;
+export default TaskScreen;
