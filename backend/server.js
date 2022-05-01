@@ -40,7 +40,10 @@ app.use("/api/variety", varietyRoute);
 app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
 });
-
+const __dirname = path.resolve();
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(__dirname, "/frontend/build/index.html"));
+}
 app.listen(PORT, () => {
   console.log(`server listening on port ${PORT}`);
 });
